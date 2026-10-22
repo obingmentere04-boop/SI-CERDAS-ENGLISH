@@ -1,0 +1,6 @@
+{
+  "name": "SI CERDAS ENGLISH",
+  "description": "Sistem Pembelajaran Cerdas, Kreatif, dan Adaptif untuk Pembelajaran Bahasa Inggris SMP. Learn with Confidence, Speak with Courage!",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

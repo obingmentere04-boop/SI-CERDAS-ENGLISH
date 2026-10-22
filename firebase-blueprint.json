@@ -1,0 +1,123 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile for teachers, students, or admins",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["guru", "siswa", "admin"] },
+        "grade": { "type": "string", "maxLength": 10 },
+        "className": { "type": "string", "maxLength": 50 },
+        "points": { "type": "number" },
+        "streakDays": { "type": "number" },
+        "avatarUrl": { "type": "string", "maxLength": 1000 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "name", "role", "email"]
+    },
+    "ComicStory": {
+      "title": "ComicStory",
+      "description": "AI-generated comic story created by user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "topic": { "type": "string", "maxLength": 200 },
+        "style": { "type": "string", "maxLength": 50 },
+        "grade": { "type": "string", "maxLength": 10 },
+        "panelsCount": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "userId", "title", "createdAt"]
+    },
+    "AnimatedVideo": {
+      "title": "AnimatedVideo",
+      "description": "AI-generated video animation item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "prompt": { "type": "string", "maxLength": 1000 },
+        "aspectRatio": { "type": "string", "enum": ["16:9", "9:16"] },
+        "duration": { "type": "string", "maxLength": 10 },
+        "modelUsed": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "userId", "title", "createdAt"]
+    },
+    "QuizAttempt": {
+      "title": "QuizAttempt",
+      "description": "Completed quiz attempt by a student",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "quizId": { "type": "string", "maxLength": 128 },
+        "quizTitle": { "type": "string", "maxLength": 200 },
+        "studentName": { "type": "string", "maxLength": 100 },
+        "score": { "type": "number" },
+        "percentage": { "type": "number" },
+        "completedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "userId", "quizId", "score", "completedAt"]
+    },
+    "WritingSubmission": {
+      "title": "WritingSubmission",
+      "description": "Student essay submission with AI and teacher feedback",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "taskId": { "type": "string", "maxLength": 128 },
+        "studentName": { "type": "string", "maxLength": 100 },
+        "content": { "type": "string", "maxLength": 10000 },
+        "status": { "type": "string", "enum": ["pending", "graded"] },
+        "submittedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "userId", "taskId", "content", "submittedAt"]
+    },
+    "SyncDocument": {
+      "title": "SyncDocument",
+      "description": "Synchronized app educational state and metadata",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "version": { "type": "number" },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "version", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles partitioned by user ID"
+    },
+    "/comics/{comicId}": {
+      "schema": { "$ref": "#/entities/ComicStory" },
+      "description": "Created AI comics"
+    },
+    "/animatedVideos/{videoId}": {
+      "schema": { "$ref": "#/entities/AnimatedVideo" },
+      "description": "Animated visual videos"
+    },
+    "/quizAttempts/{attemptId}": {
+      "schema": { "$ref": "#/entities/QuizAttempt" },
+      "description": "Evaluation and test attempts"
+    },
+    "/writingSubmissions/{submissionId}": {
+      "schema": { "$ref": "#/entities/WritingSubmission" },
+      "description": "Student writing tasks"
+    },
+    "/syncState/{syncId}": {
+      "schema": { "$ref": "#/entities/SyncDocument" },
+      "description": "System sync status and metadata"
+    }
+  }
+}
