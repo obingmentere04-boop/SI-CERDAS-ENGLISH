@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
+import http from 'http';
 import os from 'os';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
@@ -1601,6 +1602,8 @@ Output strictly in JSON format matching this schema:
 
 // Setup Vite middleware in dev or static files in production
 async function startServer() {
+  const httpServer = http.createServer(app);
+
   if (process.env.NODE_ENV === 'production' || fs.existsSync(path.resolve(__dirname, 'dist'))) {
     app.use(express.static(path.resolve(__dirname, 'dist')));
     app.get('*', (req, res, next) => {
@@ -1610,13 +1613,17 @@ async function startServer() {
   } else {
     const { createServer } = await import('vite');
     const vite = await createServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        // Share the app's HTTP server so the HMR WebSocket is reachable through the preview proxy.
+        ws: process.env.DISABLE_HMR === 'true' ? false : { server: httpServer },
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  httpServer.listen(PORT, '0.0.0.0', () => {
     console.log(`[SERVER] SI CERDAS ENGLISH running on port ${PORT}`);
   });
 }
